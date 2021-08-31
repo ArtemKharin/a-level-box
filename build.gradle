@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testImplementation('org.junit.jupiter:junit-jupiter')
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 
     compileOnly 'javax.servlet:javax.servlet-api:3.0.1'
@@ -38,3 +39,9 @@ buildscript {
     }
 }
 
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
