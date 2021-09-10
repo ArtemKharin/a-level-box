@@ -1,24 +1,23 @@
 package ua.kharin.springdemo.controller;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ua.kharin.springdemo.dto.User;
 import ua.kharin.springdemo.service.UsersService;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("")
-public class UsersController {
+@Controller
+@RequestMapping("/ui")
+public class UsersUIController {
     private final UsersService usersService;
 
-    public UsersController(UsersService usersService) {
+    public UsersUIController(UsersService usersService) {
         this.usersService = usersService;
     }
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return usersService.getAllUsers();
+    public String getUsers(Model model) {
+        model.addAttribute("users", usersService.getAllUsers());
+        return "users";
     }
 }
