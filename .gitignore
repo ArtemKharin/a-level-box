@@ -26,7 +26,7 @@ hs_err_pid*
 ### Gradle template
 .gradle
 **/build/
-!src/**/build/
+!practice/src/**/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -93,3 +93,4 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
+data/
