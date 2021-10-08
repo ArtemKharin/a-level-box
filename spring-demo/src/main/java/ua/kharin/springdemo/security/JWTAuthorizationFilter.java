@@ -2,14 +2,9 @@ package ua.kharin.springdemo.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import lombok.SneakyThrows;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -19,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class JWTAuthorizationFilter extends AbstractAuthenticationProcessingFilter {
+public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     public JWTAuthorizationFilter(AuthenticationManager authManager) {
         super(authManager);
@@ -29,7 +24,17 @@ public class JWTAuthorizationFilter extends AbstractAuthenticationProcessingFilt
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
                                     FilterChain chain) throws IOException, ServletException {
+        String header = req.getHeader("Authorization");
 
+        if (header == null || !header.startsWith("Bearer ")) {
+            chain.doFilter(req, res);
+            return;
+        }
+
+        UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        chain.doFilter(req, res);
     }
 
     // Reads the JWT from the Authorization header, and then uses JWT to validate the token
@@ -52,20 +57,5 @@ public class JWTAuthorizationFilter extends AbstractAuthenticationProcessingFilt
         }
 
         return null;
-    }
-
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        String header = request.getHeader("Authorization");
-
-        if (header == null || !header.startsWith("Bearer ")) {
-            throw new AuthenticationCredentialsNotFoundException("No JWT token found in request headers");
-        }
-
-        String authToken = header.substring(7);
-
-        JwtAuthenticationToken authRequest = new JwtAuthenticationToken(authToken);
-
-        return getAuthenticationManager().authenticate(authRequest);
     }
 }
