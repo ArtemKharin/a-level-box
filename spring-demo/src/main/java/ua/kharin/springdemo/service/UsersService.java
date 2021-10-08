@@ -34,6 +34,10 @@ public class UsersService {
         usersRepository.deleteById(id);
     }
 
+    public boolean isExists(long id) {
+        return usersRepository.existsById(id);
+    }
+
     public Optional<User> getUser(long id) {
         return usersRepository.findById(id).map(entity -> new User(entity.getId(), entity.getName(), entity.getLastName(), entity.getAge()));
     }

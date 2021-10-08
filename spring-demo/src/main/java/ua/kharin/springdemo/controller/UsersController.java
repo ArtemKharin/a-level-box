@@ -1,8 +1,6 @@
 package ua.kharin.springdemo.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ua.kharin.springdemo.dto.User;
 import ua.kharin.springdemo.service.UsersService;
 
@@ -20,5 +18,17 @@ public class UsersController {
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return usersService.getAllUsers();
+    }
+
+    @DeleteMapping("/user/{userId}")
+    public void deleteUser(@PathVariable long userId) {
+        if (usersService.isExists(userId)) {
+            usersService.deleteUser(userId);
+        }
+    }
+
+    @PostMapping("/user")
+    public void createUser(@RequestBody User user) {
+        usersService.saveUser(user);
     }
 }
