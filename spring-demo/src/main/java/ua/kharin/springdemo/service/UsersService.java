@@ -26,7 +26,7 @@ public class UsersService {
     }
 
     public User saveUser(User user) {
-        UserEntity entity = usersRepository.save(new UserEntity(null, user.getName(), user.getLastName(), user.getAge()));
+        UserEntity entity = usersRepository.save(new UserEntity(user.getId(), user.getName(), user.getLastName(), user.getAge()));
         return new User(entity.getId(), entity.getName(), entity.getLastName(), entity.getAge());
     }
 
