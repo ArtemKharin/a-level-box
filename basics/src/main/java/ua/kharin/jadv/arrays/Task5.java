@@ -1,4 +1,4 @@
-package ua.kharin.jadv.practice5;
+package ua.kharin.jadv.arrays;
 
 public class Task5 {
     public static void main(String[] args) {

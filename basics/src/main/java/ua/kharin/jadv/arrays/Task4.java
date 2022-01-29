@@ -1,4 +1,4 @@
-package ua.kharin.jadv.practice5;
+package ua.kharin.jadv.arrays;
 
 public class Task4 {
     //-	Известен рост каждого из 25 учеников класса.

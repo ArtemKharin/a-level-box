@@ -1,4 +1,4 @@
-package ua.kharin.jadv.practice4;
+package ua.kharin.jadv.arrays.sort;
 
 import java.util.Arrays;
 

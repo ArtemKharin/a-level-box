@@ -1,4 +1,4 @@
-package ua.kharin.jadv.practice6;
+package ua.kharin.jadv.wrapper;
 
 /*Создать класс IntegerBox, который содержит в себе:
         •	int поле value

@@ -1,4 +1,4 @@
-package ua.kharin.jadv.practice5;
+package ua.kharin.jadv.arrays;
 
 import java.util.Arrays;
 import java.util.Random;

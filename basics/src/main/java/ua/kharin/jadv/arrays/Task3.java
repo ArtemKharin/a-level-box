@@ -1,4 +1,4 @@
-package ua.kharin.jadv.practice5;
+package ua.kharin.jadv.arrays;
 
 public class Task3 {
     //-	Известны данные о стоимости каждого из 12 товаров.
