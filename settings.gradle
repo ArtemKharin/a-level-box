@@ -1,6 +1,4 @@
 rootProject.name = 'a-level-box'
 
-include 'spring-demo'
-include 'practice'
-include 'basics'
+include ('spring-demo', 'jdbc', 'servlets', 'basics')
 

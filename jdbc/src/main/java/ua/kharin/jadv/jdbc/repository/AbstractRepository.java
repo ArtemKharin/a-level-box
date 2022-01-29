@@ -6,9 +6,10 @@ import java.io.UncheckedIOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
-public abstract class AbstractRepository {
+public abstract class AbstractRepository<E, K> {
     private static final Properties properties = loadProperties();
 
     protected Connection createConnection() throws SQLException {
@@ -24,4 +25,8 @@ public abstract class AbstractRepository {
         }
         return props;
     }
+
+    public abstract boolean add(E object) throws SQLException;
+    public abstract E getById(K id) throws SQLException;
+    public abstract List<E> getAll() throws SQLException;
 }

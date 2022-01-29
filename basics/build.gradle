@@ -1,10 +1,7 @@
 apply plugin: 'java'
 
 group 'ua.kharin'
-version '1.0-SNAPSHOT'
-
-compileJava.options.encoding = 'UTF-8'
-compileTestJava.options.encoding = 'UTF-8'
+version = '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
