@@ -21,8 +21,7 @@ public class Task1 {
     private static double calc(double x) {
         if (x <= 0) {
             return Math.abs(x);
-        } else {
-            return x - 2;
         }
+        return x - 2;
     }
 }
