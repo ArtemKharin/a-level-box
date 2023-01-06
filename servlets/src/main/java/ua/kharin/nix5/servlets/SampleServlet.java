@@ -22,6 +22,7 @@ public class SampleServlet extends HttpServlet {
 
         resp.setContentType("text/html");
         responseBody.println("<h1 align=\"center\">Sample Servlet GET method processing</h1>");
+        responseBody.println("<img src=\"" + req.getContextPath() + "/img/picture.jpg\">");
         responseBody.println("<h3 align=\"center\">Request from: " + req.getRemoteHost() + "</h3>");
 
         String client = req.getParameter("client");
