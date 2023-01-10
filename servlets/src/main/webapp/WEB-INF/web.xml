@@ -6,7 +6,7 @@
     <display-name>JavaEE Sandbox</display-name>
     <servlet>
         <servlet-name>sample-servlet</servlet-name>
-        <servlet-class>ua.kharin.nix5.servlets.SampleServlet</servlet-class>
+        <servlet-class>ua.kharin.servlets.UserServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -22,5 +22,15 @@
     <servlet-mapping>
         <servlet-name>sandbox-jsp-servlet</servlet-name>
         <url-pattern>/sandbox</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>data-to-jsp-servlet</servlet-name>
+        <servlet-class>ua.kharin.servlets.DataToJspServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>data-to-jsp-servlet</servlet-name>
+        <url-pattern>/testdata</url-pattern>
     </servlet-mapping>
 </web-app>
