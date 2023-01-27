@@ -1,4 +1,4 @@
 rootProject.name = 'a-level-box'
 
-include ('spring-demo', 'jdbc', 'servlets', 'servlets-rest', 'basics', 'hibernate', 'solid')
+include ('spring-demo', 'jdbc', 'servlets', 'servlets-rest', 'basics', 'hibernate', 'solid', 'spring')
 

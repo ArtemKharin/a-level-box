@@ -38,3 +38,8 @@ public class Runner {
         tomcat.getServer().await();
     }
 }
+public class ExampleBean {
+    public void cleanUp() {
+        System.out.println("Bean is destroyed");
+    }
+}

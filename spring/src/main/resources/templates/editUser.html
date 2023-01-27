@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+   <form th:action="@{edit}" th:object="${user}" method="post">
+       <input th:type="hidden" th:field="*{id}">
+       <label th:for="firstName">First Name</label>
+       <br>
+       <input th:id="firstName" type="text" th:field="*{firstName}">
+       <br>
+       <label th:for="lastName">Last name</label>
+       <br>
+       <input th:id="lastName" type="text" th:field="*{lastName}">
+       <br>
+       <label th:for="city">City</label>
+       <br>
+       <input th:id="city" type="text" th:field="*{city}">
+       <br>
+       <input th:type="submit">
+
+   </form>
+</body>
+</html>
