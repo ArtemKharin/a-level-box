@@ -1,24 +1,19 @@
 package ua.kharin.jadv.practice10.classes;
 
 public class Math {
-
     public static Factorial getFactorial(int x) {
-
         int result = 1;
         for (int i = 1; i <= x; i++) {
-
             result *= i;
         }
         return new Factorial(result, x);
     }
 
     public static class Factorial {
-
         private int result;
         private int key;
 
         public Factorial(int number, int x) {
-
             result = number;
             key = x;
         }
