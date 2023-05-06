@@ -12,20 +12,29 @@ public class MyIntegerList implements Iterable<Integer> {
     }
 
     public void add(int value) {
-        if (lastElementIndex < array.length - 1) {
-            array[++lastElementIndex] = value;
-        } else {
-            throw new IllegalStateException("List is full");
+        if (lastElementIndex >= array.length - 1) {
+            array = Arrays.copyOf(array, array.length * 2);
         }
+        array[++lastElementIndex] = value;
     }
 
     public void removeLast() {
-        array[lastElementIndex--] = 0;
+        lastElementIndex--;
+    }
+
+    public int size() {
+        return lastElementIndex + 1;
     }
 
     @Override
     public String toString() {
-        return Arrays.toString(array);
+        StringBuilder result = new StringBuilder("[");
+        for (int i = 0; i <= lastElementIndex; i++) {
+            result.append(array[i]).append(", ");
+        }
+        result.delete(result.length() - 2, result.length());
+        result.append("]");
+        return result.toString();
     }
 
     @Override
@@ -45,5 +54,18 @@ public class MyIntegerList implements Iterable<Integer> {
         public Integer next() {
             return array[++index];
         }
+    }
+
+    public static void main(String[] args) {
+        MyIntegerList list = new MyIntegerList(3);
+        list.add(0);
+        list.add(0);
+        list.add(0);
+        System.out.println(list);
+        list.add(0);
+        list.add(0);
+        System.out.println(list);
+        list.removeLast();
+        System.out.println(list);
     }
 }
