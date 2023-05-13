@@ -25,6 +25,7 @@ public class SearchUtils {
             putNodeToThreadLocal(connectedNode);
             Optional<Node> localResult = depthFirstSearch(connectedNode, searchText);
             if (localResult.isPresent()) {
+                processedNodes.remove();
                 return localResult;
             }
         }
