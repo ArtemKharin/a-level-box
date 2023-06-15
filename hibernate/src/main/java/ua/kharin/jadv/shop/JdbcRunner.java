@@ -29,27 +29,25 @@ public class JdbcRunner {
         goodsRepository.getAll().forEach(System.out::println);
         Order order = createAndSaveOrder(client, goods);
         orderRepository.getAll().forEach(System.out::println);
+
+        System.out.println(orderRepository.getOrdersWithDiscount());
     }
 
     private static Client createAndSaveClient() {
         Client client = new Client(UUID.randomUUID().toString(), "Tester", "Testerov", LocalDate.of(2022, 11, 29), Collections.emptyList());
         clientRepository.save(client);
-        List<Client> clientList = clientRepository.getAll();
-        client = clientList.get(clientList.size() - 1);
         return client;
     }
 
     private static Goods createAndSaveGoods() {
         Goods goods = new Goods(UUID.randomUUID().toString(), BigDecimal.valueOf(2000), "Test goods", "Test category", List.of());
         goodsRepository.save(goods);
-        List<Goods> goodsList = goodsRepository.getAll();
-        return goodsList.get(goodsList.size() - 1);
+        return goods;
     }
 
     private static Order createAndSaveOrder(Client client, Goods goods) {
         Order order = new Order(UUID.randomUUID().toString(), LocalDateTime.now(), goods.getPrice(), null, client, List.of(goods));
         orderRepository.save(order);
-        List<Order> orderList = orderRepository.getAll();
-        return orderList.get(orderList.size() - 1);
+        return order;
     }
 }

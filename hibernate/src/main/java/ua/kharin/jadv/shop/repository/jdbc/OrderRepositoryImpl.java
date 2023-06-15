@@ -8,22 +8,18 @@ import ua.kharin.jadv.shop.repository.ClientRepository;
 import ua.kharin.jadv.shop.repository.GoodsRepository;
 import ua.kharin.jadv.shop.repository.OrderRepository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class OrderRepositoryImpl extends AbstractJDBCRepository implements OrderRepository {
-    private final String createOrderSQL = "INSERT INTO public.orders (order_id, date, total_price, discount, client_id) VALUES (?,?,?,?,?)";
-    private final String createOrderGoodsRecordSQL = "INSERT INTO public.orders_goods (order_id, goods_id) VALUES (?,?)";
-    private final String selectAllOrdersSQL = "SELECT * FROM public.orders";
-    private final String selectOrderByIdSQL = "SELECT * FROM public.orders WHERE order_id = ?";
-    private final String selectGoodsIdByOrderIdSQL = "SELECT goods_id FROM public.orders_goods WHERE order_id = ?";
+    private static final String CREATE_ORDER_SQL = "INSERT INTO orders (order_id, date, total_price, discount, client_id) VALUES (?,?,?,?,?)";
+    private static final String CREATE_ORDER_GOODS_RECORD_SQL = "INSERT INTO orders_goods (order_id, goods_id) VALUES (?,?)";
+    private static final String SELECT_ALL_ORDERS_SQL = "SELECT * FROM orders";
+    private static final String SELECT_ALL_ORDERS_WITH_DISCOUNT_SQL = "SELECT * FROM orders WHERE discount > 0";
+    private static final String SELECT_ORDER_BY_ID_SQL = "SELECT * FROM orders WHERE order_id = ?";
+    private static final String SELECT_GOODS_ID_BY_ORDER_ID_SQL = "SELECT goods_id FROM orders_goods WHERE order_id = ?";
     private GoodsRepository goodsRepository;
     private ClientRepository clientRepository;
 
@@ -36,7 +32,7 @@ public class OrderRepositoryImpl extends AbstractJDBCRepository implements Order
     @Override
     public Order getById(String id) {
         try (Connection connection = createConnection();
-             PreparedStatement statement = connection.prepareStatement(selectOrderByIdSQL)) {
+             PreparedStatement statement = connection.prepareStatement(SELECT_ORDER_BY_ID_SQL)) {
             statement.setString(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -56,7 +52,7 @@ public class OrderRepositoryImpl extends AbstractJDBCRepository implements Order
         List<Order> orders = new ArrayList<>();
         try (Connection connection = createConnection();
              Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(selectAllOrdersSQL)) {
+             ResultSet resultSet = statement.executeQuery(SELECT_ALL_ORDERS_SQL)) {
             while (resultSet.next()) {
                 Order order = extractOrderFromResultSet(resultSet);
                 order.setClient(getClientDataFromOrderResultSet(resultSet));
@@ -71,8 +67,8 @@ public class OrderRepositoryImpl extends AbstractJDBCRepository implements Order
     @Override
     public void save(Order order) {
         try (Connection connection = createConnection();
-             PreparedStatement orderStatement = connection.prepareStatement(createOrderSQL);
-             PreparedStatement orderGoodsStatement = connection.prepareStatement(createOrderGoodsRecordSQL)) {
+             PreparedStatement orderStatement = connection.prepareStatement(CREATE_ORDER_SQL);
+             PreparedStatement orderGoodsStatement = connection.prepareStatement(CREATE_ORDER_GOODS_RECORD_SQL)) {
             orderStatement.setString(1, order.getId());
             orderStatement.setTimestamp(2, Timestamp.valueOf(order.getDate()));
             orderStatement.setBigDecimal(3, order.getTotalPrice());
@@ -110,7 +106,7 @@ public class OrderRepositoryImpl extends AbstractJDBCRepository implements Order
     private List<Goods> getGoodsDataFromOrder(String orderId) {
         List<Goods> goodsList = new ArrayList<>();
         try (Connection connection = createConnection();
-             PreparedStatement statement = connection.prepareStatement(selectGoodsIdByOrderIdSQL)) {
+             PreparedStatement statement = connection.prepareStatement(SELECT_GOODS_ID_BY_ORDER_ID_SQL)) {
             statement.setString(1, orderId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -118,6 +114,23 @@ public class OrderRepositoryImpl extends AbstractJDBCRepository implements Order
                 goodsList.add(goodsRepository.getById(goodsId));
             }
             return goodsList;
+        }
+    }
+
+    @SneakyThrows
+    @Override
+    public List<Order> getOrdersWithDiscount() {
+        List<Order> orders = new ArrayList<>();
+        try (Connection connection = createConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SELECT_ALL_ORDERS_WITH_DISCOUNT_SQL)) {
+            while (resultSet.next()) {
+                Order order = extractOrderFromResultSet(resultSet);
+                order.setClient(getClientDataFromOrderResultSet(resultSet));
+                order.setGoods(getGoodsDataFromOrder(order.getId()));
+                orders.add(order);
+            }
+            return orders;
         }
     }
 }

@@ -14,15 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientRepositoryImpl extends AbstractJDBCRepository implements ClientRepository {
-    private final String createUserSQL = "INSERT INTO public.clients (client_id, first_name, last_name, date_of_birth) VALUES (?,?,?,?)";
-    private final String selectAllClientsSQL = "SELECT * FROM public.clients";
-    private final String selectClientByIdSQL = "SELECT * FROM public.clients WHERE client_id = ?";
+    private static final String CREATE_USER_SQL = "INSERT INTO clients (client_id, first_name, last_name, date_of_birth) VALUES (?,?,?,?)";
+    private static final String SELECT_ALL_CLIENTS_SQL = "SELECT * FROM clients";
+    private static final String SELECT_CLIENT_BY_ID_SQL = "SELECT * FROM clients WHERE client_id = ?";
 
     @SneakyThrows
     @Override
     public Client getById(String id) {
         try (Connection connection = createConnection();
-             PreparedStatement statement = connection.prepareStatement(selectClientByIdSQL)) {
+             PreparedStatement statement = connection.prepareStatement(SELECT_CLIENT_BY_ID_SQL)) {
             statement.setString(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -39,7 +39,7 @@ public class ClientRepositoryImpl extends AbstractJDBCRepository implements Clie
         List<Client> clients = new ArrayList<>();
         try (Connection connection = createConnection();
              Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(selectAllClientsSQL)) {
+             ResultSet resultSet = statement.executeQuery(SELECT_ALL_CLIENTS_SQL)) {
             while (resultSet.next()) {
                 clients.add(extractClientFromResultSet(resultSet));
             }
@@ -51,7 +51,7 @@ public class ClientRepositoryImpl extends AbstractJDBCRepository implements Clie
     @Override
     public void save(Client client) {
         try (Connection connection = createConnection();
-             PreparedStatement statement = connection.prepareStatement(createUserSQL)) {
+             PreparedStatement statement = connection.prepareStatement(CREATE_USER_SQL)) {
             statement.setString(1, client.getId());
             statement.setString(2, client.getFirstName());
             statement.setString(3, client.getLastName());

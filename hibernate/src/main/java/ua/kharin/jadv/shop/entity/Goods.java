@@ -5,12 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -31,7 +26,7 @@ public class Goods {
     @Column(name = "category")
     private String category;
 
-    @ManyToMany(mappedBy = "goods")
+    @ManyToMany(mappedBy = "goods", fetch = FetchType.LAZY)
     private List<Order> orders;
 
     public Goods(BigDecimal price, String title, String category) {

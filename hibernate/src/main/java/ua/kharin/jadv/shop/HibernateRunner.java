@@ -27,6 +27,8 @@ public class HibernateRunner {
         goodsRepository.getAll().forEach(System.out::println);
         Order order = createAndSaveOrder(client, goods);
         orderRepository.getAll().forEach(System.out::println);
+
+        System.out.println(orderRepository.getOrdersWithDiscount());
     }
 
     private static Client createAndSaveClient() {
