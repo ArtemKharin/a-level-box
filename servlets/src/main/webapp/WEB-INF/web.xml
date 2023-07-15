@@ -6,7 +6,7 @@
     <display-name>JavaEE Sandbox</display-name>
     <servlet>
         <servlet-name>sample-servlet</servlet-name>
-        <servlet-class>ua.kharin.servlets.UserServlet</servlet-class>
+        <servlet-class>ua.kharin.servlets.SampleServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

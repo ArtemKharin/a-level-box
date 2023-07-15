@@ -10,7 +10,7 @@
 <h1>This is Tags test page!</h1><br>
 Current Date and Time is: <m:today></m:today><br>
 1+1=<m:calc first="1" second="1">+</m:calc><br>
-1-1=<m:calc first="1" second="1">-</m:calc><br>
+2-1=<m:calc first="2" second="1">-</m:calc><br>
 2*5=<m:calc first="2" second="5">*</m:calc><br>
 20/5=<m:calc first="20" second="5">/</m:calc><br>
 <%
