@@ -9,7 +9,9 @@ repositories {
 
 dependencies {
     compileOnly 'javax.servlet:javax.servlet-api:3.0.1'
-
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:8.5.23'
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:8.5.23'
     implementation 'org.apache.tomcat:tomcat-jasper:8.5.23'
@@ -17,6 +19,7 @@ dependencies {
     implementation 'org.apache.tomcat:tomcat-jsp-api:8.5.23'
 
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 buildscript {

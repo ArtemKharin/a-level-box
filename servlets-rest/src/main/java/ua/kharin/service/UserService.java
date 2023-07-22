@@ -12,7 +12,7 @@ public final class UserService {
     private UserService() {
     }
 
-    public synchronized static UserService getInstance() {
+    public static synchronized UserService getInstance() {
         if (instance == null) {
             instance = new UserService();
         }

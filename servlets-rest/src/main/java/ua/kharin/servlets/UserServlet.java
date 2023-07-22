@@ -1,40 +1,35 @@
 package ua.kharin.servlets;
 
-import com.google.gson.Gson;
+import org.apache.commons.lang3.StringUtils;
+import ua.kharin.model.ErrorType;
 import ua.kharin.model.User;
-import ua.kharin.service.UserService;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Objects;
 
-public class UserServlet extends HttpServlet {
+public class UserServlet extends AbstractHttpServlet {
 
     private static final long serialVersionUID = -8948379822734246956L;
-    private UserService userService;
-    private Gson gson = new Gson();
 
     @Override
     public void init() {
-        userService = UserService.getInstance();
         System.out.println(getServletName() + " initialized");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        PrintWriter responseBody = resp.getWriter();
         if (!validateId(req)) {
-            resp.sendError(400);
+            throwApiError(resp, ErrorType.BAD_REQUEST, "Provided id is not valid");
         } else {
-            long id = Long.parseLong(req.getPathInfo().substring(1));
+            long id = getUserId(req);
             User user = userService.get(id);
             if (user == null) {
-                resp.sendError(404);
+                throwApiError(resp, ErrorType.NOT_FOUND, "User with id " + id + " not found");
             } else {
-                responseBody.print(gson.toJson(user));
+                resp.getWriter().print(gson.toJson(user));
+                resp.setContentType(APPLICATION_JSON);
             }
         }
     }
@@ -42,20 +37,38 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         User user = gson.fromJson(req.getReader(), User.class);
-        if (user == null || user.getFirstName() == null || user.getId() == null) {
-            resp.sendError(400);
-        } else {
+        if (validateUser(resp, user)) {
             userService.add(user);
             resp.setStatus(201);
         }
     }
 
+    private boolean validateUser(HttpServletResponse resp, User user) throws IOException {
+        if (Objects.isNull(user)) {
+            throwApiError(resp, ErrorType.BAD_REQUEST, "User is null");
+            return false;
+        }
+        if (Objects.isNull(user.getId()) || user.getId() < 1) {
+            throwApiError(resp, ErrorType.BAD_REQUEST, "ID is null or empty");
+            return false;
+        }
+        if (StringUtils.isBlank(user.getFirstName())) {
+            throwApiError(resp, ErrorType.BAD_REQUEST, "firstName is null or empty");
+            return false;
+        }
+        if (StringUtils.isBlank(user.getLastName())) {
+            throwApiError(resp, ErrorType.BAD_REQUEST, "lastName is null or empty");
+            return false;
+        }
+        return true;
+    }
+
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         if (!validateId(req)) {
-            resp.sendError(400);
+            throwApiError(resp, ErrorType.BAD_REQUEST, "Provided id is not valid");
         } else {
-            long id = Long.parseLong(req.getPathInfo().substring(1));
+            long id = getUserId(req);
             userService.remove(id);
             resp.setStatus(204);
         }
@@ -64,6 +77,11 @@ public class UserServlet extends HttpServlet {
     @Override
     public void destroy() {
         System.out.println(getServletName() + " destroyed");
+    }
+
+
+    private static long getUserId(HttpServletRequest req) {
+        return Long.parseLong(req.getPathInfo().substring(1));
     }
 
     private boolean validateId(HttpServletRequest req) {
